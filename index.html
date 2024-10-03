@@ -1,1 +1,105 @@
-<!-- https://jsnoteclub.com/blog/how-to-create-a-grid-of-divs-using-javascript/ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etch-a-Sketch</title>
+    <style>
+      body {
+        background-color: lightgray;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+        gap: 8px;
+      }
+
+      .grid {
+        display: flex;
+        justify-content: center;
+      }
+
+      #grid-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 50px;
+        background-color: white;
+        border: 1px solid black;
+      }
+
+      .cell {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="buttons">
+      <button class="clear">Clear</button>
+      <button class="resize">Resize</button>
+    </div>
+    <div class="grid">
+      <div id="grid-container"></div>
+    </div>
+
+    <script>
+      const gridContainer = 650;
+      let squares = 16;
+
+      const etchGrid = document.querySelector("#grid-container");
+      etchGrid.style.width = etchGrid.style.height = `${gridContainer}px`;
+
+      function colorBlue() {
+        this.style.backgroundColor = "blue";
+      }
+
+      function createGrid(squares) {
+        const squaresSquared = squares * squares;
+        const squareSize = `${gridContainer / squares - 2}px`;
+
+        etchGrid.innerHTML = "";
+
+        for (let i = 0; i < squaresSquared; i++) {
+          const cells = document.createElement("div");
+
+          cells.style.width = cells.style.height = squareSize;
+          cells.classList.add("cell");
+
+          etchGrid.appendChild(cells);
+
+          cells.addEventListener("mouseover", colorBlue);
+        }
+      }
+
+      createGrid(squares);
+
+      function makeCellsWhite() {
+        const allCells = document.querySelectorAll(".cell");
+        for (let i = 0; i < allCells.length; i++) {
+          allCells[i].style.backgroundColor = "white";
+        }
+      }
+
+      const clearButton = document.querySelector(".clear");
+      clearButton.addEventListener("click", makeCellsWhite);
+
+      function resizePrompt() {
+        const userInput = prompt(
+          "Resize grid by entering a value between 1 and 100:"
+        );
+
+        if (!isNaN(userInput) && userInput >= 1 && userInput <= 100) {
+          squares = userInput;
+          createGrid(squares);
+        } else {
+          alert("Please enter a number between 1 and 100.");
+        }
+        console.log(userInput);
+      }
+
+      const resizeButton = document.querySelector(".resize");
+      resizeButton.addEventListener("click", resizePrompt);
+    </script>
+  </body>
+</html>
